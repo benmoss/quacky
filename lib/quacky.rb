@@ -1,8 +1,11 @@
+require 'active_support/core_ext/module/aliasing'
+
 module Quacky
   extend self
   class Double; end
 
   class NoMethodError < RuntimeError; end
+  class MethodSignatureMismatch < ArgumentError; end
 
   class MessageExpectation
     def initialize(method)
@@ -53,7 +56,19 @@ module Quacky
   module Expectations
     def stub method_name
       raise Quacky::NoMethodError unless respond_to? method_name
-      MessageExpectation.new public_method(method_name)
+      instance_variable_set "@#{method_name}_expectation", MessageExpectation.new(public_method(method_name))
+
+      eval <<-EVAL
+        class << self
+          define_method("#{method_name}_with_expectation") do |*args|
+            @#{method_name}_expectation.call *args
+          end
+
+          alias_method_chain :#{method_name}, :expectation
+        end
+      EVAL
+
+      instance_variable_get "@#{method_name}_expectation"
     end
   end
 

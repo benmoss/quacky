@@ -54,8 +54,18 @@ describe Quacky do
       end
 
       it "should initialize and return a new Quacky::MessageExpectation otherwise" do
-        Quacky::MessageExpectation.should_receive(:new).with q_double.public_method(:duck)
+        expectation = double(:expectation)
+        Quacky::MessageExpectation.should_receive(:new).with(q_double.public_method(:duck)).and_return expectation
+        q_double.stub(:duck).should == expectation
+      end
+
+      it "should reroute calls to the original method to call the expectation's call method" do
+        expectation = double(:expectation)
+        argument = double :argument
+        Quacky::MessageExpectation.stub(:new).with(q_double.public_method(:duck)).and_return expectation
         q_double.stub(:duck)
+        expectation.should_receive(:call).with argument
+        q_double.duck(argument)
       end
     end
   end
