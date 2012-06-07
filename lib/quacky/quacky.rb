@@ -10,13 +10,15 @@ module Quacky
 
     def verify!(object)
       duck_type_methods.each do |method|
-        raise Quacky::DuckTypeVerificationFailure unless object.respond_to?(method.name)
+        raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}'" unless object.respond_to?(method.name)
 
         target_method = object.public_method(method.name)
         if target_method.parameters.count != method.parameters.count ||
            target_method.parameters.map {|p| p.first } != method.parameters.map {|p| p.first}
-          raise Quacky::DuckTypeVerificationFailure  
+          raise Quacky::DuckTypeVerificationFailure, "method signatures differ"
         end
+
+        true
       end
     end
 

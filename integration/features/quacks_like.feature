@@ -16,7 +16,7 @@ Feature: quack_like
         end
 
         describe Classroom do
-          specify { described_class.should quack_like Dismissable }
+          it { should quack_like Dismissable }
         end
       """
 
@@ -41,7 +41,7 @@ Feature: quack_like
         end
 
         describe Classroom do
-          specify { described_class.should quack_like Dismissable }
+          it { should quack_like Dismissable }
         end
       """
 
