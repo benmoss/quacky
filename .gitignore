@@ -1,3 +1,5 @@
 *.swp
 tmp/
 readme.rb
+integration/fixtures/*
+*.gem

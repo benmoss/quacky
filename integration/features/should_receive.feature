@@ -28,7 +28,7 @@ Feature: Doubles
         end
 
         describe Teacher do
-          describe "#dismiss_class" do
+          describe "#take_break" do
             let(:classroom) { Quacky.double Dismissable }
             let(:teacher)   { Teacher.new classroom }
 

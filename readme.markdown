@@ -2,6 +2,17 @@
 
 Ruby doubles and expectations that conform to duck types.
 
+## Installation
+
+Standalone: `gem install quacky`
+
+Or, in a Gemfile: 
+
+```ruby
+gem "quacky"
+```
+
+
 ## The problem
 
 Writing a test suite that tests everything, but tests each bit of functionality just once, is hard.
@@ -35,13 +46,13 @@ A test for the `Teacher` class might look like this:
 
 ```ruby
 describe Teacher do
-  describe "#dismiss_class" do
+  describe "#take_break" do
     let(:classroom) { double :classroom }
     let(:teacher)   { Teacher.new classroom }
 
     it "should send the `dismiss` message to the classroom" do
       classroom.should_receive(:dismiss)
-      teacher.dismiss_class
+      teacher.take_break
     end
   end
 end
@@ -104,13 +115,13 @@ Next, update your `Teacher` test to use a classroom double that conforms to the 
 
 ```ruby
 describe Teacher do
-  describe "#dismiss_class" do
+  describe "#take_break" do
     let(:classroom) { Quacky.double Dismissable }
     let(:teacher)   { Teacher.new classroom }
 
     it "should send the `dismiss` message to the classroom" do
       classroom.should_receive(:dismiss)
-      teacher.dismiss_class
+      teacher.take_break
     end
   end
 end
@@ -119,6 +130,7 @@ end
 Notice that we used `Quacky.double Dismissable` instead of `double :classroom` in our test.
 
 Now, when we run our test, we'll receive a `Quacky::MethodSignatureMismatch: wrong number of arguments (0 for 1)` exception.
+
 
 ## Tradeoffs / Caveats
 
@@ -132,6 +144,40 @@ it will make the design (or mis-design) of your system more obvious.
 Lastly, Quacky can't protect you from `method_missing`, `*args`, or mismatched return types. And if you truly need
 all that protection... perhaps you should simply use a statically typed language.
 
+
 ## The Full Quacky API
 
-(coming soon)
+Creating a double: 
+
+```ruby
+Quacky.double SomeModule
+```
+
+You can give it multiple modules: `Quacky.double SomeModule, SomeOtherModule`
+
+Setting up stubs on the double: 
+
+```ruby
+d = Quacky.double SomeModule
+d.stub(:some_method).and_return "foo"
+```
+
+Note: you can't stub a method that doesn't exist on the double. For that reason, when you're stubbing on a 
+Quacky double, a stub without an `and_return` is meaningless.
+
+You can scope the stub to calls with specific arguments:
+
+```ruby
+d.stub(:some_method).with(some_argument).and_return "foo"
+```
+
+Replace `stub` with `should_receive` to setup an actual expectation in your test.
+
+Lastly, if you create modules representing duck types, use the `quack_like` rspec matcher to ensure that your real collaborators also conform to that
+duck type so that you can ensure that you keep your doubles in sync with their real counterparts.
+
+```ruby
+describe Classroom do
+  it { should quack_like Dismissable }
+end
+```
