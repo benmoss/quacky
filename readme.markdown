@@ -1,5 +1,7 @@
 # Quacky
 
+[![Build Status](https://secure.travis-ci.org/moonmaster9000/quacky.png)](http://travis-ci.org/moonmaster9000/quacky)
+
 Ruby doubles and expectations that conform to duck types.
 
 ## Installation
