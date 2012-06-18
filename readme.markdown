@@ -14,12 +14,14 @@ Or, in a Gemfile:
 gem "quacky"
 ```
 
+## The Goal
+
+Write a test suite that tests everything, but only tests each bit of functionality once. 
 
 ## The problem
 
-Writing a test suite that tests everything, but tests each bit of functionality just once, is hard.
-You can use doubles in your tests to stub out collaborators, but how do you ensure those doubles actually
-conform to the duck type they represent? 
+Acheiving that goal requires us to use mocks and stubs, and in a dynamic language like Ruby, it's quite
+easy to end up with false positive tests.
 
 Consider the following code:
 
@@ -76,42 +78,27 @@ with an `Argument Error: wrong number of arguments (0 for 1)`. Nothing about the
 the `should_receive(:dismiss)` expectation in sync with the real collaborator's method signature.
 
 
-## Solutions
+## Duck Type Verification with Quacky
 
-There are different ways to solve this problem. Here we'll look at two.
-
-
-### Integration tests
-
-You could write an integration test to ensure that `Teacher` integrates with its collaborators correctly. If 
-object construction is cheap, and algorithms are efficient, then this can be a perfectly pragmatic solution.
-
-But what if the construction of objects in your system are unavoidably slow? Or what if the algorithms in your system
-are unavoidably slow? Then your integration tests will be slow. And if your test suite is slow, it's less
-likely that you'll run it everytime you add code. Even worse, slow test suites have a tendency to get slower. You 
-resign yourself to their slow execution, and pay less attention to making new tests fast.
-
-
-### Duck Type Verification with Quacky
-
-The `quacky` gem facilitates duck type verification, another approach to solving this problem that avoids
-integration testing.
-
-Start by crafting the duck type for your classroom collaborator:
+The `quacky` gem facilitates duck type verification. Start by adding a module to your test suite that represents 
+the particular duck type of Classroom that we're relying on in the `Teacher` class:
 
 ```ruby
 module Dismissable
   def dismiss break_time; end
 end
-```
 
-Next, ensure that `Classroom` conforms to the duck type:
-
-```ruby
 describe Classroom do
   it { should quack_like Dismissable }
 end
 ```
+
+We used the `quack_like` matcher in our `Classroom` spec to ensure that instances of `Classroom` conform to the
+`Dismissable` duck type. If we had other objects in our production code that need to conform to the same duck type, 
+we'd write the same test for those objects as well.
+
+Note: the `Dismissable` module should only exist in your test suite, and should never be included in your production 
+code, or mixed into anything. It simply exists to represent a duck type.
 
 Next, update your `Teacher` test to use a classroom double that conforms to the duck type:
 
@@ -133,11 +120,21 @@ Notice that we used `Quacky.double Dismissable` instead of `double :classroom` i
 
 Now, when we run our test, we'll receive a `Quacky::MethodSignatureMismatch: wrong number of arguments (0 for 1)` exception.
 
+If we fix our production code to use the `dismiss` method correctly, then the test will pass:
+
+```ruby
+def Classroom
+  def take_break
+    @classroom.dismiss 5.minutes
+    puts "reclaiming sanity"
+  end
+end
+```
 
 ## Tradeoffs / Caveats
 
 Quacky makes it possible to construct a fast test suite that isolates the object under test from it's collaborators
-while providing you with more confidance that your test suite isn't providing you with false positives.
+while reducing the number of false positives. 
 
 However, although you'll likely write far fewer integration tests, you'll still have to maintain the duck types 
 in your tests. Even with a library like Quacky, this can seem tedious. On the other hand, perhaps
@@ -157,6 +154,21 @@ Quacky.double SomeModule
 
 You can give it multiple modules: `Quacky.double SomeModule, SomeOtherModule`
 
+You can also create a class double:
+
+```ruby
+Quacky.double class: ClassDuckType, instance: InstanceDuckType
+```
+
+The double will represent a class that conforms to the `ClassDuckType`. Instances of the double will conform to
+the `InstanceDuckType`.
+
+Once again, you can give multiple modules for either the `class` or `instance` interface (or both):
+
+```ruby
+Quacky.double class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
+```
+
 Setting up stubs on the double: 
 
 ```ruby
@@ -164,8 +176,9 @@ d = Quacky.double SomeModule
 d.stub(:some_method).and_return "foo"
 ```
 
-Note: you can't stub a method that doesn't exist on the double. For that reason, when you're stubbing on a 
-Quacky double, a stub without an `and_return` is meaningless.
+Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`). 
+For that reason, when you're stubbing on a Quacky double, a stub without an `and_return` is meaningless. However,
+I've preserved the basic rspec expectation syntax.
 
 You can scope the stub to calls with specific arguments:
 
@@ -175,11 +188,13 @@ d.stub(:some_method).with(some_argument).and_return "foo"
 
 Replace `stub` with `should_receive` to setup an actual expectation in your test.
 
-Lastly, if you create modules representing duck types, use the `quack_like` rspec matcher to ensure that your real collaborators also conform to that
-duck type so that you can ensure that you keep your doubles in sync with their real counterparts.
+Lastly, if you add modules to your test suite representing duck types, use the `quack_like` rspec matcher to ensure 
+that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles 
+in sync with their real counterparts.
 
 ```ruby
-describe Classroom do
-  it { should quack_like Dismissable }
+describe SomeObject do
+  it { should quack_like SomeDuckType }
+  its(:class) { should quack_like SomeOtherDuckType }
 end
 ```

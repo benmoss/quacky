@@ -1,7 +1,7 @@
 if defined? RSpec
   require 'rspec'
   require 'rspec/matchers'
-  
+
   RSpec::Matchers.define :quack_like do |*expected_duck_types|
     expected_duck_types.each do |expected_duck_type|
       match do |actual|
