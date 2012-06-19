@@ -139,27 +139,45 @@ module Quacky
     end
 
     private
+
+    def quacky_expectations
+      @expectations ||= {}
+    end
+
     def setup_expectation method_name
+      method_name = method_name.to_sym
       raise Quacky::NoMethodError unless respond_to? method_name
-      instance_variable_set "@#{method_name}_expectation", Stub.new(public_method(method_name))
+
+      quacky_expectations[method_name] = Stub.new(public_method(method_name))
+      sanitized_name, postpend = parse_method_name method_name
 
       eval <<-EVAL
         class << self
-          define_method("#{method_name}_with_expectation") do |*args|
-            @#{method_name}_expectation.call *args
+          define_method("#{sanitized_name}_with_expectation#{postpend}") do |*args|
+            quacky_expectations[:#{method_name}].call *args
           end
 
           alias_method_chain :#{method_name}, :expectation
         end
       EVAL
 
-      instance_variable_get "@#{method_name}_expectation"
+      quacky_expectations[method_name]
+    end
+
+    def parse_method_name method_name
+      method_name = method_name.to_s
+      eol_matcher = /([\!\?])$/
+      method_name_postpend = method_name.to_s.match(eol_matcher) ? $1 : ""
+      method_name_minus_postpend = method_name.to_s.gsub eol_matcher, ""
+      [method_name_minus_postpend, method_name_postpend]
     end
   end
 
-  def double duck_type
+  def double(*duck_types)
     Double.new.tap do |object|
-      object.extend duck_type
+      duck_types.each do |duck_type|
+        object.extend duck_type
+      end
       object.extend Quacky::Expectations
     end
   end

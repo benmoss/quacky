@@ -1,7 +1,7 @@
 require_relative '../../lib/quacky/quacky'
 
 module Duck
-  def duck arg; end
+  def duck! arg; end
 end
 
 describe Quacky::DuckTypeVerifier do
@@ -70,11 +70,20 @@ describe Quacky do
   end
 
   describe "#double" do
-    let(:eigenclass) { class << Quacky.double(Duck); self; end }
+    context "with a single included module" do
+      let(:eigenclass) { class << Quacky.double(Duck); self; end }
 
-    subject { eigenclass }
+      subject { eigenclass }
 
-    its(:included_modules) { should include Duck }
+      its(:included_modules) { should include Duck }
+    end
+
+    context "with multiple included modules" do
+      let(:another_mod) { Module.new }
+      let(:eigenclass) { class << Quacky.double(Duck, another_mod); self; end }
+      subject { eigenclass }
+      its(:included_modules) { should include Duck, another_mod }
+    end
   end
 
   describe "#class_double" do
@@ -118,17 +127,33 @@ describe Quacky do
       end
 
       it "should initialize and return a new Quacky::Stub otherwise" do
-        Quacky::Stub.should_receive(:new).with(q_double.public_method(:duck)).and_return expectation
-        q_double.stub(:duck).should == expectation
+        Quacky::Stub.should_receive(:new).with(q_double.public_method(:duck!)).and_return expectation
+        q_double.stub(:duck!).should == expectation
       end
 
       it "should reroute calls to the original method to call the expectation's call method" do
-        Quacky::Stub.stub(:new).with(q_double.public_method(:duck)).and_return expectation
-        q_double.stub(:duck)
+        Quacky::Stub.stub(:new).with(q_double.public_method(:duck!)).and_return expectation
+        q_double.stub(:duck!)
 
         argument = double :argument
         expectation.should_receive(:call).with argument
-        q_double.duck(argument)
+        q_double.duck!(argument)
+      end
+
+      it "should support methods ending in !, ?, and regular letters" do
+        q_double = Quacky.double(Module.new do 
+          def bang!; end
+          def question?; end
+          def regular; end
+        end)
+
+        q_double.should_receive(:bang!).and_return "bang"
+        q_double.should_receive(:question?).and_return "question"
+        q_double.should_receive(:regular).and_return "regular"
+
+        q_double.bang!.should == "bang"
+        q_double.question?.should == "question"
+        q_double.regular.should == "regular"
       end
     end
 
@@ -138,13 +163,13 @@ describe Quacky do
       end
 
       it "should initialize and return a new QuackyStub otherwise" do
-        Quacky::Stub.should_receive(:new).with(q_double.public_method(:duck)).and_return expectation
-        q_double.should_receive(:duck).should == expectation
+        Quacky::Stub.should_receive(:new).with(q_double.public_method(:duck!)).and_return expectation
+        q_double.should_receive(:duck!).should == expectation
       end
 
       it "should add the generated expectation to the list of required expectations" do
-        Quacky::Stub.stub(:new).with(q_double.public_method(:duck)).and_return expectation
-        q_double.should_receive(:duck)    
+        Quacky::Stub.stub(:new).with(q_double.public_method(:duck!)).and_return expectation
+        q_double.should_receive(:duck!)    
         Quacky.expectations.should include expectation
       end
     end
@@ -160,7 +185,7 @@ module Quacky
     end
 
     describe Stub do
-      let(:q_expectation) { Quacky::Stub.new(object.public_method(:duck)) }
+      let(:q_expectation) { Quacky::Stub.new(object.public_method(:duck!)) }
 
       describe "#with" do
         it "should raise an exception if the original method's signature mismatches" do
