@@ -87,8 +87,24 @@ describe Quacky do
   end
 
   describe "#class_double" do
-    let(:class_double)  { Quacky.class_double class: class_ducks, instance: instance_ducks }
+    let(:class_double)  { Quacky.class_double :class_double_duck, class: class_ducks, instance: instance_ducks }
     let(:class_eigenclass) { class << class_double; self; end }
+    let(:class_ducks) { [] }
+    let(:instance_ducks) { [] }
+
+    describe ".inspect" do
+      context "class" do
+        it "should return `Quacky::ClassDouble(:<double_name>)`" do
+          class_double.inspect.should == "Quacky::ClassDouble(:class_double_duck)"
+        end
+      end
+
+      context "instance" do
+        it "should return `<Quacky::ClassDouble :<double_name>>`" do
+          class_double.new.inspect.should == "<Quacky::ClassDouble :class_double_duck>"
+        end
+      end
+    end
 
     shared_examples_for "quacky class double" do
       context "instance methods" do

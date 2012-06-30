@@ -194,10 +194,32 @@ module Quacky
     end
   end
 
-  def class_double options
+  module ClassInspect
+    attr_reader :class_double_name
+
+    def name_class_double name
+      @class_double_name = name
+    end
+
+    def inspect
+      "Quacky::ClassDouble(:#{@class_double_name})"
+    end
+  end
+
+  module InstanceInspect
+    def inspect
+      "<Quacky::ClassDouble :#{self.class.class_double_name}>"
+    end
+  end
+
+  def class_double name, options
     class_modules, instance_modules = parse_class_double_options options
 
     Class.new do
+      extend ClassInspect
+      include InstanceInspect
+      name_class_double name
+
       class_modules.each do |class_module|
         extend class_module
       end
