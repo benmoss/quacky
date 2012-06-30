@@ -29,7 +29,7 @@ Feature: Doubles
 
         describe Teacher do
           describe "#take_break" do
-            let(:classroom) { Quacky.double Dismissable }
+            let(:classroom) { Quacky.double :classroom, Dismissable }
             let(:teacher)   { Teacher.new classroom }
 
             it "should send the `dismiss` message to the classroom" do

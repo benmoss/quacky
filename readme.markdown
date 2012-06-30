@@ -105,7 +105,7 @@ Next, update your `Teacher` test to use a classroom double that conforms to the 
 ```ruby
 describe Teacher do
   describe "#take_break" do
-    let(:classroom) { Quacky.double Dismissable }
+    let(:classroom) { Quacky.double :classroom, Dismissable }
     let(:teacher)   { Teacher.new classroom }
 
     it "should send the `dismiss` message to the classroom" do
@@ -116,7 +116,7 @@ describe Teacher do
 end
 ```
 
-Notice that we used `Quacky.double Dismissable` instead of `double :classroom` in our test.
+Notice that we used `Quacky.double :classroom, Dismissable` instead of `double :classroom` in our test.
 
 Now, when we run our test, we'll receive a `Quacky::MethodSignatureMismatch: wrong number of arguments (0 for 1)` exception.
 
@@ -149,15 +149,15 @@ all that protection... perhaps you should simply use a statically typed language
 Creating a double: 
 
 ```ruby
-Quacky.double SomeModule
+Quacky.double :double_name, SomeModule
 ```
 
-You can give it multiple modules: `Quacky.double SomeModule, SomeOtherModule`
+You can give it multiple modules: `Quacky.double :double_name, SomeModule, SomeOtherModule`
 
 You can also create a class double:
 
 ```ruby
-Quacky.double class: ClassDuckType, instance: InstanceDuckType
+Quacky.class_double :class_double_name, class: ClassDuckType, instance: InstanceDuckType
 ```
 
 The double will represent a class that conforms to the `ClassDuckType`. Instances of the double will conform to
@@ -166,13 +166,13 @@ the `InstanceDuckType`.
 Once again, you can give multiple modules for either the `class` or `instance` interface (or both):
 
 ```ruby
-Quacky.double class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
+Quacky.class_double :class_double_name, class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
 ```
 
 Setting up stubs on the double: 
 
 ```ruby
-d = Quacky.double SomeModule
+d = Quacky.double :double_name, SomeModule
 d.stub(:some_method).and_return "foo"
 ```
 
