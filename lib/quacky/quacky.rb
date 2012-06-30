@@ -15,7 +15,7 @@ module Quacky
         target_method = object.public_method(method.name)
         if target_method.parameters.count != method.parameters.count ||
            target_method.parameters.map {|p| p.first } != method.parameters.map {|p| p.first}
-          raise Quacky::DuckTypeVerificationFailure, "method signatures differ"
+          raise Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted."
         end
 
         true
@@ -134,7 +134,7 @@ module Quacky
       begin
         @method.call *args
       rescue ArgumentError => e
-        raise Quacky::MethodSignatureMismatch, e.message
+        raise Quacky::MethodSignatureMismatch, "#{@method.receiver}##{@method.name} was called with the #{e.message}"
       end
     end
   end

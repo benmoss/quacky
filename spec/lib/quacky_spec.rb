@@ -39,7 +39,7 @@ describe Quacky::DuckTypeVerifier do
         end
 
         it "should raise a Quacky::DuckTypeVerificationFailure" do
-          expect { verifier.verify! non_conforming_object }.to raise_exception Quacky::DuckTypeVerificationFailure
+          expect { verifier.verify! non_conforming_object }.to raise_exception Quacky::DuckTypeVerificationFailure, "definitions of method `quack` differ in parameters accepted." 
         end
       end
     end
@@ -211,7 +211,7 @@ module Quacky
 
       describe "#with" do
         it "should raise an exception if the original method's signature mismatches" do
-          expect { q_expectation.with 1,2,3 }.to raise_exception Quacky::MethodSignatureMismatch
+          expect { q_expectation.with 1,2,3 }.to raise_exception Quacky::MethodSignatureMismatch, "#{object.inspect}#duck! was called with the wrong number of arguments (3 for 1)"
         end
       end
 
