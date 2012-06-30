@@ -100,30 +100,14 @@ we'd write the same test for those objects as well.
 Note: the `Dismissable` module should only exist in your test suite, and should never be included in your production 
 code, or mixed into anything. It simply exists to represent a duck type.
 
-Next, update your `Teacher` test to use a classroom double that conforms to the duck type:
-
-```ruby
-describe Teacher do
-  describe "#take_break" do
-    let(:classroom) { Quacky.double :classroom, Dismissable }
-    let(:teacher)   { Teacher.new classroom }
-
-    it "should send the `dismiss` message to the classroom" do
-      classroom.should_receive(:dismiss)
-      teacher.take_break
-    end
-  end
-end
-```
-
-Notice that we used `Quacky.double :classroom, Dismissable` instead of `double :classroom` in our test.
+Next, change the `double :classroom` in your spec to `Quacky.double :classroom, Dismissable`.
 
 Now, when we run our test, we'll receive a `Quacky::MethodSignatureMismatch: wrong number of arguments (0 for 1)` exception.
 
-If we fix our production code to use the `dismiss` method correctly, then the test will pass:
+If we fix our `Teacher#take_break` production code to use the `dismiss` method correctly, then the test will pass:
 
 ```ruby
-def Classroom
+class Teacher
   def take_break
     @classroom.dismiss 5.minutes
     puts "reclaiming sanity"
@@ -182,8 +166,8 @@ I've preserved the basic rspec expectation syntax.
 
 You can scope the stub to calls with specific arguments:
 
-```ruby
-d.stub(:some_method).with(some_argument).and_return "foo"
+```
+d.stub(:some_method).with("some_argument").and_return "foo"
 ```
 
 Replace `stub` with `should_receive` to setup an actual expectation in your test.
