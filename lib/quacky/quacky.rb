@@ -8,7 +8,7 @@ module Quacky
       @duck_type = duck_type
     end
 
-    def verify!(object)
+    def verify! object
       duck_type_methods.each do |method|
         raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}'" unless object.respond_to?(method.name)
 
