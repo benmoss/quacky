@@ -42,7 +42,19 @@ end
 
 module Quacky
   extend self
-  class Double; end
+
+  class Double
+    def initialize(name)
+      @name = name
+    end
+
+    def inspect
+      "<Quacky::Double :#{name}>"
+    end
+
+    private
+    attr_reader :name
+  end
 
   class NoMethodError < RuntimeError;             end
   class MethodSignatureMismatch < ArgumentError;  end
@@ -173,8 +185,8 @@ module Quacky
     end
   end
 
-  def double(*duck_types)
-    Double.new.tap do |object|
+  def double(name, *duck_types)
+    Double.new(name).tap do |object|
       duck_types.each do |duck_type|
         object.extend duck_type
       end

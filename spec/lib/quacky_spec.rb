@@ -71,7 +71,7 @@ describe Quacky do
 
   describe "#double" do
     context "with a single included module" do
-      let(:eigenclass) { class << Quacky.double(Duck); self; end }
+      let(:eigenclass) { class << Quacky.double(:duck, Duck); self; end }
 
       subject { eigenclass }
 
@@ -80,7 +80,7 @@ describe Quacky do
 
     context "with multiple included modules" do
       let(:another_mod) { Module.new }
-      let(:eigenclass) { class << Quacky.double(Duck, another_mod); self; end }
+      let(:eigenclass) { class << Quacky.double(:duck, Duck, another_mod); self; end }
       subject { eigenclass }
       its(:included_modules) { should include Duck, another_mod }
     end
@@ -118,8 +118,14 @@ describe Quacky do
   end
 
   describe Quacky::Double do
-    let(:q_double) { Quacky.double Duck }
+    let(:q_double) { Quacky.double :duck, Duck }
     let(:expectation) { double(:expectation) }
+
+    describe ".inspect" do
+      it "should be formatted like `<Quacky::Double :<double_name>>`" do
+        Quacky::Double.new(:test).inspect.should == "<Quacky::Double :test>"
+      end
+    end
 
     describe ".stub" do
       it "should raise an exception if the method does not already exist on the double" do
@@ -141,7 +147,7 @@ describe Quacky do
       end
 
       it "should support methods ending in !, ?, and regular letters" do
-        q_double = Quacky.double(Module.new do 
+        q_double = Quacky.double(:quacky_double, Module.new do 
           def bang!; end
           def question?; end
           def regular; end
