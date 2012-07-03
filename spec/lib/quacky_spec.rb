@@ -266,7 +266,7 @@ module Quacky
         end
 
         context "not called at all" do
-          specify { expect { subject }.to raise_exception Quacky::UnsatisfiedExpectation }
+          specify { expect { subject }.to raise_exception Quacky::UnsatisfiedExpectation, "Expected `duck!` to be called." }
         end
 
         context "with expectation" do

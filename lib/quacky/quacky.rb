@@ -105,7 +105,7 @@ module Quacky
           raise UnsatisfiedExpectation
         end
       else
-        was_called? || raise(UnsatisfiedExpectation)
+        was_called? || raise(UnsatisfiedExpectation, "Expected `#{@method.name}` to be called.")
       end
     end
 
@@ -120,7 +120,7 @@ module Quacky
       if expected_args && called_args != expected_args
         raise(
           Quacky::UnexpectedArguments, 
-          "#{@method.name} was called with unexpected arguments: #{called_args.join ", "}"
+          "#{@method.name} was called with unexpected arguments: #{called_args.map(&:inspect).join ", "}. expected: #{expected_args.map(&:inspect).join ", "}"
         )
       end
     end
