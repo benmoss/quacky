@@ -1,6 +1,7 @@
 # Quacky
 
 [![Build Status](https://secure.travis-ci.org/moonmaster9000/quacky.png)](http://travis-ci.org/moonmaster9000/quacky)
+[![Build Dependency Status](https://gemnasium.com/moonmaster9000/quacky.png)](https://gemnasium.com/moonmaster9000/quacky.png)
 
 Ruby doubles and expectations that conform to duck types.
 
