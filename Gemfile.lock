@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    quacky (0.2.1)
+    quacky (0.2.2)
       activesupport (~> 3.2.5)
 
 GEM

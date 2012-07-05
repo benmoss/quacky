@@ -1,7 +1,6 @@
 SPEC_FILE   = File.expand_path(File.dirname(__FILE__)) + "/../fixtures/feature_spec.rb"
 SETUP_CODE  = <<-CODE
-require_relative '../../lib/quacky/quacky'
-require_relative '../../lib/quacky/rspec_setup'
+require_relative '../../lib/quacky'
 CODE
 
 Given /^the following production code:$/ do |production_code|
