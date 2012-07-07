@@ -15,6 +15,10 @@ Or, in a Gemfile:
 gem "quacky"
 ```
 
+Quacky currently supports only two test frameworks: `rspec` and `minitest`.
+
+Checkout the `MiniTest` section at the end of this README if you'd like to learn how to use it with that framework.
+
 ## The Goal
 
 Write a test suite that tests everything, but only tests each bit of functionality once. 
@@ -131,6 +135,8 @@ all that protection... perhaps you should simply use a statically typed language
 
 ## The Full Quacky API
 
+### RSpec
+
 Creating a double: 
 
 ```ruby
@@ -181,5 +187,66 @@ in sync with their real counterparts.
 describe SomeObject do
   it { should quack_like SomeDuckType }
   its(:class) { should quack_like SomeOtherDuckType }
+end
+```
+
+
+### MiniTest/Unit
+
+Quacky automatically extends itself with MiniTest-style syntax and matchers if it detects the `MiniTest` constant exists.
+
+Creating a mock object: 
+
+```ruby
+Quacky.mock :double_name, SomeModule
+```
+
+You can give it multiple modules: `Quacky.mock :double_name, SomeModule, SomeOtherModule`
+
+You can also create a class mock:
+
+```ruby
+Quacky.class_mock :class_double_name, class: ClassDuckType, instance: InstanceDuckType
+```
+
+The double will represent a class that conforms to the `ClassDuckType`. Instances of the double will conform to
+the `InstanceDuckType`.
+
+Once again, you can give multiple modules for either the `class` or `instance` interface (or both):
+
+```ruby
+Quacky.class_mock :class_double_name, class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
+```
+
+Setting up stubs on the double: 
+
+```ruby
+d = Quacky.mock :double_name, SomeModule
+d.stub :some_method, "foo"
+```
+
+Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`). 
+For that reason, when you're stubbing on a Quacky double, a stub without a second argument (the return value) is meaningless. However,
+
+You can scope the stub to calls with specific arguments:
+
+```
+d.stub :some_method, "foo" ["some_argument"] 
+```
+
+Replace `stub` with `expect` to setup an actual expectation in your test.
+
+Lastly, if you add modules to your test suite representing duck types, include `Quacky::MiniTest::Matchers` in your test and use the `assert_quack_like` method to ensure 
+that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles 
+in sync with their real counterparts.
+
+```ruby
+class SomeObjectTest < MiniTest::Unit::TestCase
+  include Quacky::MiniTest::Matchers
+
+  def test_duck_type_conformity
+    assert_quacks_like SomeObject.new, SomeInstanceDuckType
+    assert_quacks_like SomeClass, SomeClassDuckType
+  end
 end
 ```

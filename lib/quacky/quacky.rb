@@ -40,6 +40,7 @@ module Quacky
     class_modules, instance_modules = parse_class_double_options options
 
     Class.new do
+      extend Expectations
       extend ClassInspect
       include InstanceInspect
       name_class_double name

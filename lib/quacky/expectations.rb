@@ -4,12 +4,12 @@ module Quacky
   class NoMethodError < RuntimeError; end
 
   module Expectations
-    def stub method_name
+    def quacky_stub method_name
       setup_expectation method_name
     end
 
     def should_receive method_name
-      stub(method_name).tap do |expectation|
+      quacky_stub(method_name).tap do |expectation|
         Quacky.expectations << expectation
       end
     end

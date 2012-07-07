@@ -17,6 +17,7 @@ module Quacky
     def and_return value=nil, &block
       @return_value = value
       @return_block = block
+      self
     end
 
     def call *args

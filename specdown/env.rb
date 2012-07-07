@@ -1,4 +1,5 @@
 require 'rspec'
+require 'minitest/unit'
 require_relative '../lib/quacky'
 
 class SomeObject; end

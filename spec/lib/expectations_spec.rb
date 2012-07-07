@@ -6,17 +6,17 @@ describe "Quacky::Double created with Quacky.double" do
 
   describe "#stub" do
     it "should raise an exception if the method does not already exist on the double" do
-      expect { q_double.stub("random_method_#{rand 1000000}") }.to raise_exception Quacky::NoMethodError
+      expect { q_double.quacky_stub("random_method_#{rand 1000000}") }.to raise_exception Quacky::NoMethodError
     end
 
     it "should initialize and return a new Quacky::Stub otherwise" do
       Quacky::Stub.should_receive(:new).with(q_double.public_method(:duck!)).and_return expectation
-      q_double.stub(:duck!).should == expectation
+      q_double.quacky_stub(:duck!).should == expectation
     end
 
     it "should reroute calls to the original method to call the expectation's call method" do
       Quacky::Stub.stub(:new).with(q_double.public_method(:duck!)).and_return expectation
-      q_double.stub(:duck!)
+      q_double.quacky_stub(:duck!)
 
       argument = double :argument
       expectation.should_receive(:call).with argument
