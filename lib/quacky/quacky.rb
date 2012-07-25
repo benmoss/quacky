@@ -41,6 +41,7 @@ module Quacky
 
     Class.new do
       extend Expectations
+      include Expectations
       extend ClassInspect
       include InstanceInspect
       name_class_double name
