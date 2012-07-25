@@ -105,7 +105,25 @@ we'd write the same test for those objects as well.
 Note: the `Dismissable` module should only exist in your test suite, and should never be included in your production 
 code, or mixed into anything. It simply exists to represent a duck type.
 
-Next, change the `double :classroom` in your spec to `Quacky.double :classroom, Dismissable`.
+Next, change the `double :classroom` in your spec to `Quacky.double :classroom, Dismissable`:
+
+```ruby
+module Dismissable
+  def dismiss break_time; end
+end
+
+describe Teacher do
+  describe "#take_break" do
+    let(:classroom) { Quacky.double :classroom, Dismissable }
+    let(:teacher)   { Teacher.new classroom }
+
+    it "should send the `dismiss` message to the classroom" do
+      classroom.should_receive(:dismiss)
+      teacher.take_break
+    end
+  end
+end
+```
 
 Now, when we run our test, we'll receive a `Quacky::MethodSignatureMismatch: wrong number of arguments (0 for 1)` exception.
 
