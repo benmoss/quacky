@@ -3,5 +3,3 @@ rvm:
   - 1.9.2
   - 1.9.3
   - jruby-19mode
-  - jruby-head
-  - ruby-head
