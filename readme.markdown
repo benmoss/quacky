@@ -249,7 +249,7 @@ For that reason, when you're stubbing on a Quacky double, a stub without a secon
 You can scope the stub to calls with specific arguments:
 
 ```
-d.stub :some_method, "foo" ["some_argument"] 
+d.stub :some_method, "foo", ["some_argument"] 
 ```
 
 Replace `stub` with `expect` to setup an actual expectation in your test.
