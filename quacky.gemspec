@@ -5,8 +5,9 @@ Gem::Specification.new do |s|
   s.email      = "moonmaster9000@gmail.com"
   s.homepage   = "https://github.com/moonmaster9000/quacky"
   s.authors    = "Matt Parker"
+  s.license    = "MIT"
 
-  s.files      = Dir["lib/**/*"] << "VERSION"
+  s.files      = Dir["lib/**/*"] << "VERSION" << "LICENSE"
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "activesupport", "~> 3.2.5"

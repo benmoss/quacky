@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.4
+
+MIT License
+
 ## 0.2.3
 
 MiniTest::Unit support
