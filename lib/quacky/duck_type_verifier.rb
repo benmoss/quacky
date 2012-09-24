@@ -11,8 +11,13 @@ module Quacky
         raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}'" unless object.respond_to?(method.name)
 
         target_method = object.public_method(method.name)
-        if target_method.parameters.count != method.parameters.count ||
-           target_method.parameters.map {|p| p.first } != method.parameters.map {|p| p.first}
+        return true if target_method.parameters.any? { |p| p.first == :rest }
+
+        method_parameters = method.parameters.reject { |p| p.first == :block }
+        target_method_parameters = target_method.parameters.reject { |p| p.first == :block }
+
+        if target_method_parameters.count != method_parameters.count ||
+           target_method_parameters.map {|p| p.first } != method_parameters.map {|p| p.first}
           raise Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted."
         end
 

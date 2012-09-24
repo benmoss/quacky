@@ -51,5 +51,29 @@ describe Quacky::DuckTypeVerifier do
         expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
       end
     end
+
+    context "given a method that accepts any number of arguments" do
+      let(:conforming_object) do
+        Class.new do
+          def quack *args; end
+        end.new
+      end
+
+      it "should return true" do
+        expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
+      end
+    end
+
+    context "given a method that accepts a named block" do
+      let(:conforming_object) do
+        Class.new do
+          def quack arg1,arg2,arg3=nil,&block; end
+        end.new
+      end
+
+      it "should return true" do
+        expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
+      end
+    end
   end
 end
