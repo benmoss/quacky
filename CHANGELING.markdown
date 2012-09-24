@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.5
+
+More sporting method argument matching.
+
+For example, you could now use "delegate" in your production code, and it will match the duck type without fail.
+
 ## 0.2.4
 
 MIT License
