@@ -1,7 +1,7 @@
 module MiniTest; end
 
-require_relative '../../../lib/quacky/minitest_setup'
 require_relative '../../../lib/quacky/quacky'
+require_relative '../../../lib/quacky/minitest_setup'
 
 describe Quacky do
   describe ".mock" do
