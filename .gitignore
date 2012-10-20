@@ -4,3 +4,4 @@ readme.rb
 integration/fixtures/*
 *.gem
 .idea
+Gemfile.lock
