@@ -9,7 +9,7 @@ Ruby doubles and expectations that conform to duck types.
 
 Standalone: `gem install quacky`
 
-Or, in a Gemfile: 
+Or, in a Gemfile:
 
 ```ruby
 gem "quacky"
@@ -21,7 +21,7 @@ Checkout the `MiniTest` section at the end of this README if you'd like to learn
 
 ## The Goal
 
-Write a test suite that tests everything, but only tests each bit of functionality once. 
+Write a test suite that tests everything, but only tests each bit of functionality once.
 
 ## The problem
 
@@ -78,14 +78,14 @@ class Classroom
 end
 ```
 
-So what's the problem? The `Teacher` tests still pass, though they shouldn't. In production, this code will explode 
+So what's the problem? The `Teacher` tests still pass, though they shouldn't. In production, this code will explode
 with an `Argument Error: wrong number of arguments (0 for 1)`. Nothing about these expectations force us to keep
 the `should_receive(:dismiss)` expectation in sync with the real collaborator's method signature.
 
 
 ## Duck Type Verification with Quacky
 
-The `quacky` gem facilitates duck type verification. Start by adding a module to your test suite that represents 
+The `quacky` gem facilitates duck type verification. Start by adding a module to your test suite that represents
 the particular duck type of Classroom that we're relying on in the `Teacher` class:
 
 ```ruby
@@ -99,10 +99,10 @@ end
 ```
 
 We used the `quack_like` matcher in our `Classroom` spec to ensure that instances of `Classroom` conform to the
-`Dismissable` duck type. If we had other objects in our production code that need to conform to the same duck type, 
+`Dismissable` duck type. If we had other objects in our production code that need to conform to the same duck type,
 we'd write the same test for those objects as well.
 
-Note: the `Dismissable` module should only exist in your test suite, and should never be included in your production 
+Note: the `Dismissable` module should only exist in your test suite, and should never be included in your production
 code, or mixed into anything. It simply exists to represent a duck type.
 
 Next, change the `double :classroom` in your spec to `Quacky.double :classroom, Dismissable`:
@@ -141,9 +141,9 @@ end
 ## Tradeoffs / Caveats
 
 Quacky makes it possible to construct a fast test suite that isolates the object under test from it's collaborators
-while reducing the number of false positives. 
+while reducing the number of false positives.
 
-However, although you'll likely write far fewer integration tests, you'll still have to maintain the duck types 
+However, although you'll likely write far fewer integration tests, you'll still have to maintain the duck types
 in your tests. Even with a library like Quacky, this can seem tedious. On the other hand, perhaps
 it will make the design (or mis-design) of your system more obvious.
 
@@ -155,7 +155,7 @@ all that protection... perhaps you should simply use a statically typed language
 
 ### RSpec
 
-Creating a double: 
+Creating a double:
 
 ```ruby
 Quacky.double :double_name, SomeModule
@@ -178,14 +178,14 @@ Once again, you can give multiple modules for either the `class` or `instance` i
 Quacky.class_double :class_double_name, class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
 ```
 
-Setting up stubs on the double: 
+Setting up stubs on the double:
 
 ```ruby
 d = Quacky.double :double_name, SomeModule
 d.stub(:some_method).and_return "foo"
 ```
 
-Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`). 
+Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`).
 For that reason, when you're stubbing on a Quacky double, a stub without an `and_return` is meaningless. However,
 I've preserved the basic rspec expectation syntax.
 
@@ -197,8 +197,8 @@ d.stub(:some_method).with("some_argument").and_return "foo"
 
 Replace `stub` with `should_receive` to setup an actual expectation in your test.
 
-Lastly, if you add modules to your test suite representing duck types, use the `quack_like` rspec matcher to ensure 
-that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles 
+Lastly, if you add modules to your test suite representing duck types, use the `quack_like` rspec matcher to ensure
+that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles
 in sync with their real counterparts.
 
 ```ruby
@@ -213,7 +213,7 @@ end
 
 Quacky automatically extends itself with MiniTest-style syntax and matchers if it detects the `MiniTest` constant exists.
 
-Creating a mock object: 
+Creating a mock object:
 
 ```ruby
 Quacky.mock :double_name, SomeModule
@@ -236,26 +236,26 @@ Once again, you can give multiple modules for either the `class` or `instance` i
 Quacky.class_mock :class_double_name, class: [ClassDuckType, AnotherClassDuckType], instance: [InstanceDuckType, AnotherInstanceDuckType]
 ```
 
-Setting up stubs on the double: 
+Setting up stubs on the double:
 
 ```ruby
 d = Quacky.mock :double_name, SomeModule
 d.stub :some_method, "foo"
 ```
 
-Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`). 
+Note: you can't stub a method that doesn't exist on the double (that would defeat the purpose of `Quacky`).
 For that reason, when you're stubbing on a Quacky double, a stub without a second argument (the return value) is meaningless. However,
 
 You can scope the stub to calls with specific arguments:
 
 ```
-d.stub :some_method, "foo", ["some_argument"] 
+d.stub :some_method, "foo", ["some_argument"]
 ```
 
 Replace `stub` with `expect` to setup an actual expectation in your test.
 
-Lastly, if you add modules to your test suite representing duck types, include `Quacky::MiniTest::Matchers` in your test and use the `assert_quack_like` method to ensure 
-that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles 
+Lastly, if you add modules to your test suite representing duck types, include `Quacky::MiniTest::Matchers` in your test and use the `assert_quack_like` method to ensure
+that your real collaborators also conform to that duck type so that you can ensure that you keep your doubles
 in sync with their real counterparts.
 
 ```ruby

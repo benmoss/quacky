@@ -35,7 +35,7 @@ module Quacky
     end
 
     def duck_type_object
-      return @duck_type_object if @duck_type_object 
+      return @duck_type_object if @duck_type_object
       duck_type_class = Class.new
       duck_type_class.send :include, duck_type
       @duck_type_object = duck_type_class.new
