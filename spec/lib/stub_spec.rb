@@ -27,10 +27,20 @@ module Quacky
         end
 
         context "block return value" do
-          it "should return the value returned by the block" do
-            return_value = double :return_value
-            q_expectation.and_return { return_value }
-            q_expectation.call(double :argument).should == return_value
+          context "explicit" do
+            it "should return the value returned by the block" do
+              return_value = double :return_value
+              q_expectation.and_return { return_value }
+              q_expectation.call(double :argument).should == return_value
+            end
+          end
+
+          context "implicit" do
+            it "should return the value returned by the block" do
+              return_value = double :return_value
+              q_expectation = Quacky::Stub.new(object.public_method(:duck!)) { return_value }
+              q_expectation.call(double :argument).should == return_value
+            end
           end
         end
       end
