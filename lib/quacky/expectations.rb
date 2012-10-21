@@ -22,7 +22,7 @@ module Quacky
 
     def setup_expectation method_name
       method_name = method_name.to_sym
-      raise Quacky::NoMethodError unless respond_to? method_name
+      raise Quacky::NoMethodError, "#{inspect} does not define `#{method_name}'" unless respond_to?(method_name)
 
       quacky_expectations[method_name] = Stub.new(public_method(method_name))
       sanitized_name, postpend = parse_method_name method_name
