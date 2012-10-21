@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.6
+
+New features courtesy of Sir Ben Moss:
+
+* stubbed return values with blocks (`double.stub(:value) { "return value" }`)
+* better error messages for calling non-existant messages on quacky doubles
+
 ## 0.2.5
 
 More sporting method argument matching.
