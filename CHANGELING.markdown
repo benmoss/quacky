@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.7
+
+Bug fix for accidental minitest syntax injection in rspec controller tests. (Ben Moss - https://github.com/moonmaster9000/quacky/pull/11/files)
+
 ## 0.2.6
 
 New features courtesy of Sir Ben Moss:
