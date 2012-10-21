@@ -1,6 +1,7 @@
 TEST_FILE   = File.expand_path(File.dirname(__FILE__)) + "/../fixtures/feature_spec.rb"
 SETUP_CODE  = <<-CODE
 $LOAD_PATH.unshift '../../lib'
+require 'minitest/autorun'
 require 'quacky'
 CODE
 
