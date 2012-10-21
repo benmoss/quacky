@@ -34,7 +34,7 @@ module Quacky
     end
 
     def validate_satisfaction!
-      if expected_args 
+      if expected_args
         if called_args == expected_args
           true
         else
@@ -55,7 +55,7 @@ module Quacky
     def validate_expectation
       if expected_args && called_args != expected_args
         raise(
-          Quacky::UnexpectedArguments, 
+          Quacky::UnexpectedArguments,
           "#{@method.name} was called with unexpected arguments: #{called_args.map(&:inspect).join ", "}. expected: #{expected_args.map(&:inspect).join ", "}"
         )
       end

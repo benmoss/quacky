@@ -24,7 +24,7 @@ describe "Quacky::Double created with Quacky.double" do
     end
 
     it "should support methods ending in !, ?, and regular letters" do
-      q_double = Quacky.double(:quacky_double, Module.new do 
+      q_double = Quacky.double(:quacky_double, Module.new do
         def bang!; end
         def question?; end
         def regular; end
@@ -52,7 +52,7 @@ describe "Quacky::Double created with Quacky.double" do
 
     it "should add the generated expectation to the list of required expectations" do
       Quacky::Stub.stub(:new).with(q_double.public_method(:duck!)).and_return expectation
-      q_double.should_receive(:duck!)    
+      q_double.should_receive(:duck!)
       Quacky.expectations.should include expectation
     end
   end

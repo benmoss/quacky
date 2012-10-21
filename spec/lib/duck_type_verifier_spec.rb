@@ -35,7 +35,7 @@ describe Quacky::DuckTypeVerifier do
         end
 
         it "should raise a Quacky::DuckTypeVerificationFailure" do
-          expect { verifier.verify! non_conforming_object }.to raise_exception Quacky::DuckTypeVerificationFailure, "definitions of method `quack` differ in parameters accepted." 
+          expect { verifier.verify! non_conforming_object }.to raise_exception Quacky::DuckTypeVerificationFailure, "definitions of method `quack` differ in parameters accepted."
         end
       end
     end

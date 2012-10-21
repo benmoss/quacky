@@ -9,7 +9,7 @@ Feature: quack_like
         end
       """
 
-    And the following test code: 
+    And the following test code:
       """
         module Dismissable
           def dismiss break_time; end
@@ -34,7 +34,7 @@ Feature: quack_like
         end
       """
 
-    And the following test code: 
+    And the following test code:
       """
         module Dismissable
           def dismiss break_time; end
@@ -58,7 +58,7 @@ Feature: quack_like
         end
       """
 
-    And the following test code: 
+    And the following test code:
       """
         module Dismissable
           def dismiss break_time; end

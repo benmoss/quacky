@@ -9,7 +9,7 @@ Feature: assert_quacks_like
         end
       """
 
-    And the following test code: 
+    And the following test code:
       """
         require 'minitest/autorun'
 
