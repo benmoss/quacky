@@ -4,8 +4,9 @@ module Quacky
   class MethodSignatureMismatch < ArgumentError;  end
 
   class Stub
-    def initialize method
+    def initialize method, &block
       @method = method
+      @return_block = block
     end
 
     def with *args

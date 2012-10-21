@@ -45,3 +45,7 @@ end
 Then /^I should not get a "(.*?)" error in the RSpec output$/ do |snippet|
   @output.should_not include snippet
 end
+
+Then /^I should see 1 successful example in the RSpec output$/ do
+  @output.should include("1 example, 0 failures")
+end

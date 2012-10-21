@@ -4,8 +4,8 @@ module Quacky
   class NoMethodError < RuntimeError; end
 
   module Expectations
-    def quacky_stub method_name
-      setup_expectation method_name
+    def quacky_stub method_name, &block
+      setup_expectation method_name, &block
     end
 
     def should_receive method_name
@@ -20,11 +20,11 @@ module Quacky
       @expectations ||= {}
     end
 
-    def setup_expectation method_name
+    def setup_expectation method_name, &block
       method_name = method_name.to_sym
       raise Quacky::NoMethodError, "#{inspect} does not define `#{method_name}'" unless respond_to?(method_name)
 
-      quacky_expectations[method_name] = Stub.new(public_method(method_name))
+      quacky_expectations[method_name] = Stub.new(public_method(method_name), &block)
       sanitized_name, postpend = parse_method_name method_name
 
       eval <<-EVAL
