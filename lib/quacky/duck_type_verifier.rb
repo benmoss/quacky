@@ -10,16 +10,18 @@ module Quacky
       duck_type_methods.each do |method|
         raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}'" unless object.respond_to?(method.name)
 
-        target_method = object.public_method(method.name)
-        return true if target_method.parameters.any? { |p| p.first == :rest }
+        begin
+          target_method = object.public_method(method.name)
+          return true if target_method.parameters.any? { |p| p.first == :rest }
 
-        method_parameters = method.parameters.reject { |p| p.first == :block }
-        target_method_parameters = target_method.parameters.reject { |p| p.first == :block }
+          method_parameters = method.parameters.reject { |p| p.first == :block }
+          target_method_parameters = target_method.parameters.reject { |p| p.first == :block }
 
-        if target_method_parameters.count != method_parameters.count ||
-           target_method_parameters.map {|p| p.first } != method_parameters.map {|p| p.first}
-          raise Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted."
-        end
+          if target_method_parameters.count != method_parameters.count ||
+             target_method_parameters.map {|p| p.first } != method_parameters.map {|p| p.first}
+            raise Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted."
+          end
+        rescue NameError; end
 
         true
       end

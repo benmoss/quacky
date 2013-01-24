@@ -75,5 +75,23 @@ describe Quacky::DuckTypeVerifier do
         expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
       end
     end
+
+    context "given an object that responds to but does not explicitly implement a method" do
+      let(:unexplicitly_conforming_object) do
+        Class.new do
+          def respond_to?(method_name, include_private = false)
+            method_name.to_s == 'quack' || super
+          end
+        end.new
+      end
+
+      it "should not raise a DuckTypeVerificationError" do
+        expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
+      end
+
+      it "should not raise a NameError" do
+        expect { verifier.verify! conforming_object }.not_to raise_exception NameError
+      end
+    end
   end
 end
