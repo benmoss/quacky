@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.8
+
+Support methods that "respond_to" a method but implement the method via method_missing. (The Kimmel - https://github.com/moonmaster9000/quacky/pull/13) 
+
 ## 0.2.7
 
 Bug fix for accidental minitest syntax injection in rspec controller tests. (Ben Moss - https://github.com/moonmaster9000/quacky/pull/11/files)
