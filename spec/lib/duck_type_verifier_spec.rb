@@ -4,12 +4,14 @@ describe Quacky::DuckTypeVerifier do
   let(:conforming_object) do
     Class.new do
       def quack arg1,arg2,arg3=nil; end
+      def waddle; end
     end.new
   end
 
   let(:duck_type_module) do
     Module.new do
       def quack a,b,c=nil; end
+      def waddle; end
     end
   end
 
@@ -41,22 +43,14 @@ describe Quacky::DuckTypeVerifier do
     end
 
     context "given a conforming object" do
-      let(:conforming_object) do
-        Class.new do
-          def quack arg1,arg2,arg3=nil; end
-        end.new
-      end
-
       it "should return true" do
         expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
       end
     end
 
     context "given a method that accepts any number of arguments" do
-      let(:conforming_object) do
-        Class.new do
-          def quack *args; end
-        end.new
+      before do
+        def conforming_object.quack(*args); end
       end
 
       it "should return true" do
@@ -65,10 +59,8 @@ describe Quacky::DuckTypeVerifier do
     end
 
     context "given a method that accepts a named block" do
-      let(:conforming_object) do
-        Class.new do
-          def quack arg1,arg2,arg3=nil,&block; end
-        end.new
+      before do
+        def conforming_object.quack(arg1,arg2,arg3=nil,&block); end
       end
 
       it "should return true" do
