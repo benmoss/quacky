@@ -49,12 +49,26 @@ describe Quacky::DuckTypeVerifier do
     end
 
     context "given a method that accepts any number of arguments" do
-      before do
-        def conforming_object.quack(*args); end
+      context "when the object conforms" do
+        before do
+          def conforming_object.quack(*args); end
+        end
+
+        it "should return true" do
+          expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
+        end
       end
 
-      it "should return true" do
-        expect { verifier.verify! conforming_object }.not_to raise_exception Quacky::DuckTypeVerificationFailure
+      context "when the object does not conform" do
+        let(:non_conforming_object) do
+          Class.new do
+            def quack(*args); end
+          end.new
+        end
+
+        it "raises a Quacky::DuckTypeVerificationFailure" do
+          expect { verifier.verify! non_conforming_object }.to raise_exception Quacky::DuckTypeVerificationFailure
+        end
       end
     end
 
