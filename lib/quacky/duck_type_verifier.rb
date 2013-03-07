@@ -12,7 +12,7 @@ module Quacky
 
         begin
           target_method = object.public_method(method.name)
-          return true if target_method.parameters.any? { |p| p.first == :rest }
+          next if target_method.parameters.any? { |p| p.first == :rest }
 
           method_parameters = method.parameters.reject { |p| p.first == :block }
           target_method_parameters = target_method.parameters.reject { |p| p.first == :block }
