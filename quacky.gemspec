@@ -2,9 +2,9 @@ Gem::Specification.new do |s|
   s.name       = "quacky"
   s.version    = File.read "VERSION"
   s.summary    = "Ensure your test doubles quack like the real thing."
-  s.email      = "moonmaster9000@gmail.com"
-  s.homepage   = "https://github.com/moonmaster9000/quacky"
-  s.authors    = "Matt Parker"
+  s.email      = ["moonmaster9000@gmail.com", "ben@mossity.com"]
+  s.homepage   = "https://github.com/benmoss/quacky"
+  s.authors    = ["Matt Parker", "Ben Moss"]
   s.license    = "MIT"
 
   s.files      = Dir["lib/**/*"] << "VERSION" << "LICENSE"
