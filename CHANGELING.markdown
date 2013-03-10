@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+Fix a bug where methods accepting a splat would short-circuit duck type verification
+
 ## 0.2.8
 
 Support methods that "respond_to" a method but implement the method via method_missing. (The Kimmel - https://github.com/moonmaster9000/quacky/pull/13) 
