@@ -10,12 +10,7 @@ module Quacky
   end
 
   def double(name, *duck_types)
-    Double.new(name).tap do |object|
-      duck_types.each do |duck_type|
-        object.extend duck_type
-      end
-      object.extend Expectations
-    end
+    Double.new(name, *duck_types)
   end
 
   module ClassInspect
