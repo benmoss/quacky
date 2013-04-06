@@ -4,27 +4,27 @@ module Quacky
   class MethodSignatureMismatch < ArgumentError;  end
 
   class Stub
-    def initialize method, &block
+    def initialize(method, &block)
       @method = method
       @return_block = block
     end
 
-    def with *args
+    def with(*args)
       @expected_args = args
-      call_through *args
+      call_through(*args)
       self
     end
 
-    def and_return value=nil, &block
+    def and_return(value=nil, &block)
       @return_value = value
       @return_block = block
       self
     end
 
-    def call *args
+    def call(*args)
       @called_args = args
       validate_expectation
-      call_through *args
+      call_through(*args)
 
       if expected_args
         return_value if (called_args == expected_args)
@@ -38,7 +38,7 @@ module Quacky
         if called_args == expected_args
           true
         else
-          raise UnsatisfiedExpectation
+          raise(UnsatisfiedExpectation)
         end
       else
         was_called? || raise(UnsatisfiedExpectation, "Expected `#{@method.name}` to be called.")
@@ -66,9 +66,9 @@ module Quacky
       @return_block.call if @return_block
     end
 
-    def call_through *args
+    def call_through(*args)
       begin
-        @method.call *args
+        @method.call(*args)
       rescue ArgumentError => e
         raise Quacky::MethodSignatureMismatch, "#{@method.receiver}##{@method.name} was called with the #{e.message}"
       end

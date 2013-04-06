@@ -3,7 +3,7 @@ module Quacky
     def initialize(name, *duck_types)
       self.name = name
       duck_types.each do |duck_type|
-        extend duck_type
+        extend(duck_type)
       end
       extend Expectations
     end

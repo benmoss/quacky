@@ -2,7 +2,7 @@ module Quacky
   class DuckTypeVerificationFailure < RuntimeError; end
 
   class DuckTypeVerifier
-    def initialize duck_type
+    def initialize(duck_type)
       @duck_type = duck_type
     end
 
@@ -19,7 +19,7 @@ module Quacky
 
           if target_method_parameters.count != method_parameters.count ||
              target_method_parameters.map {|p| p.first } != method_parameters.map {|p| p.first}
-            raise Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted."
+            raise(Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted.")
           end
         rescue NameError; end
 
@@ -39,7 +39,7 @@ module Quacky
     def duck_type_object
       return @duck_type_object if @duck_type_object
       duck_type_class = Class.new
-      duck_type_class.send :include, duck_type
+      duck_type_class.send(:include, duck_type)
       @duck_type_object = duck_type_class.new
     end
   end

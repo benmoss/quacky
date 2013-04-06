@@ -16,7 +16,7 @@ module Quacky
   module ClassInspect
     attr_reader :class_double_name
 
-    def name_class_double name
+    def name_class_double(name)
       @class_double_name = name
     end
 
@@ -31,33 +31,33 @@ module Quacky
     end
   end
 
-  def class_double name, options
-    class_modules, instance_modules = parse_class_double_options options
+  def class_double(name, options)
+    class_modules, instance_modules = parse_class_double_options(options)
 
     Class.new do
       extend Expectations
       include Expectations
       extend ClassInspect
       include InstanceInspect
-      name_class_double name
+      name_class_double(name)
 
       class_modules.each do |class_module|
-        extend class_module
+        extend(class_module)
       end
 
       instance_modules.each do |instance_module|
-        include instance_module
+        include(instance_module)
       end
     end
   end
 
   private
-  def parse_class_double_options options
-    class_modules    = options.fetch :class
-    instance_modules = options.fetch :instance
+  def parse_class_double_options(options)
+    class_modules    = options.fetch(:class)
+    instance_modules = options.fetch(:instance)
 
-    class_modules    = [class_modules] unless class_modules.respond_to? :each
-    instance_modules = [instance_modules] unless instance_modules.respond_to? :each
+    class_modules    = [class_modules] unless class_modules.respond_to?(:each)
+    instance_modules = [instance_modules] unless instance_modules.respond_to?(:each)
 
     [class_modules, instance_modules]
   end
