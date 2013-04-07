@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/benmoss/quacky.png?branch=master)](https://travis-ci.org/benmoss/quacky)
 [![Build Dependency Status](https://gemnasium.com/benmoss/quacky.png)](https://gemnasium.com/benmoss/quacky)
+[![Coverage Status](https://coveralls.io/repos/benmoss/quacky/badge.png?branch=master)](https://coveralls.io/r/benmoss/quacky)
 
 Ruby doubles and expectations that conform to duck types.
 
