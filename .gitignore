@@ -5,3 +5,4 @@ integration/fixtures/*
 *.gem
 .idea
 Gemfile.lock
+coverage
