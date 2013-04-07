@@ -1,6 +1,6 @@
 require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
-
+require 'mutant'
 
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "integration/features --format pretty"
@@ -11,3 +11,11 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 end
 
 task :default => [:spec, :features]
+
+desc 'Run mutant'
+task :mutant do
+  status = Mutant::CLI.run(%W(-r ./spec/spec_helper.rb ::Quacky --rspec-dm2))
+  if status.nonzero?
+    raise 'Mutant task is not successful'
+  end
+end

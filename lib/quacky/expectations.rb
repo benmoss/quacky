@@ -41,9 +41,8 @@ module Quacky
     end
 
     def parse_method_name(method_name)
-      method_name = method_name.to_s
       eol_matcher = /([\!\?])$/
-      method_name_postpend = method_name.to_s.match(eol_matcher) ? $1 : ""
+      method_name_postpend = method_name.to_s.match(eol_matcher)
       method_name_minus_postpend = method_name.to_s.gsub(eol_matcher, "")
       [method_name_minus_postpend, method_name_postpend]
     end

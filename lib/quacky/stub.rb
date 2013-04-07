@@ -26,30 +26,20 @@ module Quacky
       validate_expectation
       call_through(*args)
 
-      if expected_args
-        return_value if (called_args == expected_args)
-      else
-        return_value
-      end
+      return_value
     end
 
     def validate_satisfaction!
-      if expected_args
-        if called_args == expected_args
-          true
-        else
-          raise(UnsatisfiedExpectation)
-        end
-      else
-        was_called? || raise(UnsatisfiedExpectation, "Expected `#{@method.name}` to be called.")
+      if not_called?
+        raise(UnsatisfiedExpectation, "Expected `#{@method.name}` to be called.")
       end
     end
 
     private
     attr_reader :called_args, :expected_args
 
-    def was_called?
-      !!called_args
+    def not_called?
+      !called_args
     end
 
     def validate_expectation

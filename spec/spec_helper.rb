@@ -4,9 +4,11 @@ require 'quacky/stub'
 require 'quacky/double'
 require 'quacky/expectations'
 require 'quacky/duck_type_verifier'
-require 'coveralls'
 
-Coveralls.wear!
+if ENV["CI"]
+  require 'coveralls'
+  Coveralls.wear!
+end
 
 module Duck
   def duck! arg; end

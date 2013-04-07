@@ -8,7 +8,7 @@ module Quacky
 
     def verify! object
       duck_type_methods.each do |method|
-        raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}'" unless object.respond_to?(method.name)
+        raise Quacky::DuckTypeVerificationFailure, "object does not respond to `#{method.name}`" unless object.respond_to?(method.name)
 
         begin
           target_method = object.public_method(method.name)
@@ -22,8 +22,6 @@ module Quacky
             raise(Quacky::DuckTypeVerificationFailure, "definitions of method `#{method.name}` differ in parameters accepted.")
           end
         rescue NameError; end
-
-        true
       end
     end
 
@@ -37,7 +35,6 @@ module Quacky
     end
 
     def duck_type_object
-      return @duck_type_object if @duck_type_object
       duck_type_class = Class.new
       duck_type_class.send(:include, duck_type)
       @duck_type_object = duck_type_class.new
