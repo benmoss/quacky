@@ -1,6 +1,9 @@
 require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
 require 'mutant'
+require 'devtools'
+
+Devtools.init_rake_tasks
 
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "integration/features --format pretty"
