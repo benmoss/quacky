@@ -1,0 +1,35 @@
+lib/quacky/double.rb:3: Quacky::Double#initialize: The method summary should be specified
+lib/quacky/double.rb:3: Quacky::Double#initialize: The public/semipublic method should have an example specified
+lib/quacky/double.rb:3: Quacky::Double#initialize: The @api tag should be specified
+lib/quacky/double.rb:3: Quacky::Double#initialize: The @api tag must be either public, semipublic or private
+lib/quacky/double.rb:16: Quacky::Double#name: The public/semipublic method should have an example specified
+lib/quacky/double.rb:16: Quacky::Double#name: The @api tag should be specified
+lib/quacky/double.rb:16: Quacky::Double#name: The @api tag must be either public, semipublic or private
+lib/quacky/double.rb:16: Quacky::Double#name: A method with private visibility must have an @api tag of private
+lib/quacky/double.rb:16: Quacky::Double#name: The @return tag should be specified
+lib/quacky/double.rb:16: Quacky::Double#name=: The public/semipublic method should have an example specified
+lib/quacky/double.rb:16: Quacky::Double#name=: The @api tag should be specified
+lib/quacky/double.rb:16: Quacky::Double#name=: The @api tag must be either public, semipublic or private
+lib/quacky/double.rb:16: Quacky::Double#name=: A method with private visibility must have an @api tag of private
+lib/quacky/double.rb:16: Quacky::Double#name=: The @return tag should be specified
+lib/quacky/duck_type_verifier.rb:29: Quacky::DuckTypeVerifier#duck_type: The public/semipublic method should have an example specified
+lib/quacky/duck_type_verifier.rb:29: Quacky::DuckTypeVerifier#duck_type: The @api tag should be specified
+lib/quacky/duck_type_verifier.rb:29: Quacky::DuckTypeVerifier#duck_type: The @api tag must be either public, semipublic or private
+lib/quacky/duck_type_verifier.rb:29: Quacky::DuckTypeVerifier#duck_type: A method with private visibility must have an @api tag of private
+lib/quacky/duck_type_verifier.rb:29: Quacky::DuckTypeVerifier#duck_type: The @return tag should be specified
+lib/quacky/quacky.rb:17: Quacky::ClassInspect#class_double_name: The public/semipublic method should have an example specified
+lib/quacky/quacky.rb:17: Quacky::ClassInspect#class_double_name: The @api tag should be specified
+lib/quacky/quacky.rb:17: Quacky::ClassInspect#class_double_name: The @api tag must be either public, semipublic or private
+lib/quacky/quacky.rb:17: Quacky::ClassInspect#class_double_name: The @return tag should be specified
+lib/quacky/stub.rb:39: Quacky::Stub#expected_args: The public/semipublic method should have an example specified
+lib/quacky/stub.rb:39: Quacky::Stub#expected_args: The @api tag should be specified
+lib/quacky/stub.rb:39: Quacky::Stub#expected_args: The @api tag must be either public, semipublic or private
+lib/quacky/stub.rb:39: Quacky::Stub#expected_args: A method with private visibility must have an @api tag of private
+lib/quacky/stub.rb:39: Quacky::Stub#expected_args: The @return tag should be specified
+lib/quacky/stub.rb:39: Quacky::Stub#called_args: The public/semipublic method should have an example specified
+lib/quacky/stub.rb:39: Quacky::Stub#called_args: The @api tag should be specified
+lib/quacky/stub.rb:39: Quacky::Stub#called_args: The @api tag must be either public, semipublic or private
+lib/quacky/stub.rb:39: Quacky::Stub#called_args: A method with private visibility must have an @api tag of private
+lib/quacky/stub.rb:39: Quacky::Stub#called_args: The @return tag should be specified
+
+YARD-Coverage: 52.9%  Success: 37  Failed: 33  Total: 70

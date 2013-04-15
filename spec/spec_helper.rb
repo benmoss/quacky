@@ -4,6 +4,7 @@ require 'quacky/stub'
 require 'quacky/double'
 require 'quacky/expectations'
 require 'quacky/duck_type_verifier'
+require 'devtools/spec_helper'
 
 if ENV["CI"]
   require 'coveralls'
